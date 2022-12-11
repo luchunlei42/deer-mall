@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/mall?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: root
+    password: kirito486
+    druid:
+      initial-size: 5
+      min-idle: 10
+      max-active: 20
+      web-stat-filter:
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*" #不统计这些请求数据
+      stat-view-servlet: # 访问监控网页的登录用户名和密码
+        login-username: druid
+        login-password: druid
+
+  redis:
+    host: localhost
+    database: 0
+    port: 6379
+    password:
+    timeout: 300ms
+
+logging:
+  level:
+    root: info
+    com.chunlei.mall: debug

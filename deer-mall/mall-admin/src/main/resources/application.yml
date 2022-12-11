@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: mall-admin
+  profiles:
+    active: dev #默认为开发环境
+
+  servlet:
+    multipart:
+      enabled: true
+      max-request-size: 10MB
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+mybatis:
+  mapper-locations:
+    - classpath*:com/**/mapper/*.xml
+
+jwt:
+  tokenHeader: Authorization
+  secret: mall-admin-secret
+  expiration: 604800 #JWT的超期限时间(60*60*24*7)
+  tokenHead: 'Bearer' #JWT负载中的开头
+
+redis:
+  database: mall
+  key:
+    admin: 'ums:admin'
+    resourceList: 'ums:resourceList'
+  expire:
+    common: 86400 #24 hours
+
+secure:
+  ignored:
+    urls: #安全路径白名单
+      - /swagger-ui/
+      - /swagger-resources/**
+      - /**/v2/api-docs
+      - /**/*.html
+      - /**/*.js
+      - /**/*.css
+      - /**/*.png
+      - /**/*.map
+      - /favicon.ico
+      - /actuator/**
+      - /druid/**
+      - /admin/login
+      - /admin/register
+      - /admin/info
+      - /admin/logout
+      - /minio/upload
