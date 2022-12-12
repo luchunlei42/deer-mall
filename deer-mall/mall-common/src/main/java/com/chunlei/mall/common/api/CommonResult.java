@@ -19,6 +19,10 @@ public class CommonResult<T> {
         this.data = data;
     }
 
+    public static <T> CommonResult<T> success(T data){
+        return new CommonResult<T>(ResultCode.SUCCESS.getCode(),ResultCode.SUCCESS.getMessage(),data);
+    }
+
     public static <T> CommonResult<T> success(T data, String message){
         return new CommonResult<T>(ResultCode.SUCCESS.getCode(), message,data);
     }
