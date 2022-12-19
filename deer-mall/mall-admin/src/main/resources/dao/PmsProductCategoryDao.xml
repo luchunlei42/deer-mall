@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chunlei.mall.dao.PmsProductCategoryDao">
+    <select id="getListWithChildren" resultMap="listWithChildrenResultMap">
+        SELECT
+            pc.id,
+            pc.name,
+            cpc.id children_id,
+            cpc.name children_name
+        FROM pms_product_category pc
+        LEFT JOIN pms_product_category cpc ON pc.id = cpc.parent_id
+        WHERE
+            pc.parent_id = 0
+    </select>
+    <resultMap id="listWithChildrenResultMap" type="com.chunlei.mall.dto.PmsProductCategoryWithChildrenItem">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <collection property="children" ofType="com.chunlei.mall.model.PmsProductCategory">
+            <id property="id" jdbcType="BIGINT" column="children_id"/>
+            <result column="children_name" jdbcType="VARCHAR" property="name"/>
+        </collection>
+    </resultMap>
+</mapper>

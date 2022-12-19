@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chunlei.mall.dao.PmsProductAttributeCategoryDao">
+    <resultMap id="productAttrCateResultMap" type="com.chunlei.mall.dto.PmsProductAttributeCategoryItem">
+        <id property="id" jdbcType="BIGINT" column="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <collection property="productAttributeList" ofType="com.chunlei.mall.model.PmsProductAttribute">
+            <id property="id" jdbcType="BIGINT" column="attr_id"/>
+            <result column="attr_name" jdbcType="VARCHAR" property="name"/>
+        </collection>
+    </resultMap>
+    <select id="getItemListWithAttr" resultMap="productAttrCateResultMap">
+        select l.id, l.name, r.id attr_id, r.name attr_name
+        from pms_product_attribute_category l
+        left join pms_product_attribute r on l.id = r.product_attribute_category_id and r.type = 1
+    </select>
+</mapper>

@@ -2,12 +2,15 @@ package com.chunlei.mall.service.Impl;
 
 import com.chunlei.mall.bo.AdminUserDetails;
 import com.chunlei.mall.common.exception.ApiException;
+import com.chunlei.mall.dao.UmsAdminRoleRelationDao;
 import com.chunlei.mall.mapper.UmsAdminMapper;
 import com.chunlei.mall.model.UmsAdmin;
 import com.chunlei.mall.model.UmsAdminExample;
 import com.chunlei.mall.model.UmsResource;
+import com.chunlei.mall.model.UmsRole;
 import com.chunlei.mall.security.util.JwtTokenUtil;
 import com.chunlei.mall.service.UmsAdminService;
+import com.github.pagehelper.PageHelper;
 import org.apache.ibatis.annotations.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +34,8 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
+    @Autowired
+    private UmsAdminRoleRelationDao umsAdminRoleRelationDao;
 
     @Override
     public UmsAdmin getAdminByUsername(String username) {
@@ -74,5 +79,17 @@ public class UmsAdminServiceImpl implements UmsAdminService {
             LOGGER.warn("登录异常：{}",e.getMessage());
         }
         return token;
+    }
+
+    @Override
+    public List<UmsRole> getRoleList(Long adminId) {
+        return umsAdminRoleRelationDao.getRoleList(adminId);
+    }
+
+    @Override
+    public List<UmsAdmin> getAdminList(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        UmsAdminExample umsAdminExample = new UmsAdminExample();
+        return umsAdminMapper.selectByExample(umsAdminExample);
     }
 }

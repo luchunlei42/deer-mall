@@ -5,7 +5,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@MapperScan({"com.chunlei.mall.mapper"})
+@MapperScan({"com.chunlei.mall.mapper","com.chunlei.mall.dao"})
 public class MybatisConfig {
 
 }
