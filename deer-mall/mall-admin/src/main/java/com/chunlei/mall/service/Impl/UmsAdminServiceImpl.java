@@ -1,5 +1,7 @@
 package com.chunlei.mall.service.Impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import com.chunlei.mall.bo.AdminUserDetails;
 import com.chunlei.mall.common.exception.ApiException;
 import com.chunlei.mall.dao.UmsAdminRoleRelationDao;
@@ -9,6 +11,7 @@ import com.chunlei.mall.model.UmsAdminExample;
 import com.chunlei.mall.model.UmsResource;
 import com.chunlei.mall.model.UmsRole;
 import com.chunlei.mall.security.util.JwtTokenUtil;
+import com.chunlei.mall.service.UmsAdminCacheService;
 import com.chunlei.mall.service.UmsAdminService;
 import com.github.pagehelper.PageHelper;
 import org.apache.ibatis.annotations.Mapper;
@@ -37,13 +40,17 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     @Autowired
     private UmsAdminRoleRelationDao umsAdminRoleRelationDao;
 
+
     @Override
     public UmsAdmin getAdminByUsername(String username) {
+        UmsAdmin admin = getCacheService().getAdmin(username);
+        if(admin != null) return admin;
         UmsAdminExample example = new UmsAdminExample();
         example.createCriteria().andUsernameEqualTo(username);
         List<UmsAdmin> adminList = umsAdminMapper.selectByExample(example);
         if(adminList != null && adminList.size()>0){
-            UmsAdmin admin = adminList.get(0);
+            admin = adminList.get(0);
+            getCacheService().setAdmin(admin);
             return admin;
         }
         return null;
@@ -54,11 +61,13 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         //获取用户信息
         UmsAdmin admin = getAdminByUsername(username);
         if(admin != null){
-            //获取权限 TODO
-            return new AdminUserDetails(admin);
+            List<UmsResource> resourceList = getResourceList(admin.getId()) ;
+            return new AdminUserDetails(admin,resourceList);
         }
         throw new UsernameNotFoundException("用户名或密码错误");
     }
+
+
 
     @Override
     public String login(String username, String password) {
@@ -92,4 +101,28 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         UmsAdminExample umsAdminExample = new UmsAdminExample();
         return umsAdminMapper.selectByExample(umsAdminExample);
     }
+
+    @Override
+    public List<UmsResource> getResourceList(Long adminId) {
+        List<UmsResource> resourceList = getCacheService().getResourceList(adminId);
+        if(CollUtil.isNotEmpty(resourceList)){
+            return resourceList;
+        }
+        resourceList = umsAdminRoleRelationDao.getResourceList(adminId);
+        if(CollUtil.isNotEmpty(resourceList)){
+            getCacheService().setResourceList(adminId,resourceList);
+        }
+        return resourceList;
+    }
+
+    @Override
+    public UmsAdmin getItem(Long id) {
+        return umsAdminMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public UmsAdminCacheService getCacheService() {
+        return SpringUtil.getBean(UmsAdminCacheService.class);
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.chunlei.mall.service;
 
 import com.chunlei.mall.model.UmsAdmin;
+import com.chunlei.mall.model.UmsResource;
 import com.chunlei.mall.model.UmsRole;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -16,5 +17,11 @@ public interface UmsAdminService {
     List<UmsRole> getRoleList(Long adminId);
 
     List<UmsAdmin> getAdminList(int pageNum, int pageSize);
+
+    List<UmsResource> getResourceList(Long adminId);
+
+    UmsAdmin getItem(Long id);
+
+    UmsAdminCacheService getCacheService();
 
 }
