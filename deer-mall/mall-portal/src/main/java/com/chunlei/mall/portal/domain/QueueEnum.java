@@ -7,7 +7,7 @@ public enum QueueEnum {
     /**
      * 消息通知队列
      */
-    QUEUE_ORDER_CANCEL("chunleo.order.direct","chunlei.order.cancel","chunlei.order.cancel"),
+    QUEUE_ORDER_CANCEL("chunlei.order.direct","chunlei.order.cancel","chunlei.order.cancel"),
     /**
      * 消息通知ttl队列
      */
