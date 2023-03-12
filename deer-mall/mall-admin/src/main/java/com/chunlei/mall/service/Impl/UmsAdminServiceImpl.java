@@ -2,6 +2,7 @@ package com.chunlei.mall.service.Impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.extra.spring.SpringUtil;
+import com.chunlei.mall.annotation.ReadOnly;
 import com.chunlei.mall.bo.AdminUserDetails;
 import com.chunlei.mall.common.exception.ApiException;
 import com.chunlei.mall.dao.UmsAdminRoleRelationDao;
@@ -56,6 +57,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         return null;
     }
 
+    @ReadOnly
     @Override
     public UserDetails loadUserByUsername(String username) {
         //获取用户信息
